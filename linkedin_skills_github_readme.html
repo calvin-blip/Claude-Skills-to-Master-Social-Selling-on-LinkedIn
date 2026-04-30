@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Syne:wght@400;600;700;800&family=Inter:wght@400;500&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #21262d;
+    --border: #30363d;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --blue: #58a6ff;
+    --green: #3fb950;
+    --orange: #f0883e;
+    --purple: #bc8cff;
+    --pink: #ff7b72;
+    --teal: #39d353;
+    --accent: #58a6ff;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    padding: 0 0 80px;
+  }
+
+  .hero {
+    border-bottom: 1px solid var(--border);
+    padding: 60px 48px 48px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(88,166,255,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .badge-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+  }
+
+  .badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    border: 1px solid;
+    letter-spacing: 0.3px;
+  }
+
+  .badge-blue { color: var(--blue); border-color: rgba(88,166,255,0.3); background: rgba(88,166,255,0.08); }
+  .badge-green { color: var(--green); border-color: rgba(63,185,80,0.3); background: rgba(63,185,80,0.08); }
+  .badge-purple { color: var(--purple); border-color: rgba(188,140,255,0.3); background: rgba(188,140,255,0.08); }
+  .badge-orange { color: var(--orange); border-color: rgba(240,136,62,0.3); background: rgba(240,136,62,0.08); }
+
+  .hero-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 42px;
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 8px;
+    letter-spacing: -1px;
+  }
+
+  .hero-title span { color: var(--blue); }
+
+  .hero-sub {
+    font-size: 16px;
+    color: var(--muted);
+    max-width: 580px;
+    margin-bottom: 32px;
+    line-height: 1.6;
+  }
+
+  .stat-row {
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+
+  .stat {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 3px;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  .content {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 48px;
+  }
+
+  .section-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin: 48px 0 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .intro-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px 28px;
+    margin-bottom: 32px;
+  }
+
+  .intro-block p {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  .intro-block p + p { margin-top: 12px; }
+
+  .intro-block strong { color: var(--text); }
+
+  .skill-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .skill-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px 28px;
+    transition: border-color 0.15s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .skill-card:hover { border-color: #58a6ff66; }
+
+  .skill-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    border-radius: 3px 0 0 3px;
+  }
+
+  .card-blue::before { background: var(--blue); }
+  .card-green::before { background: var(--green); }
+  .card-purple::before { background: var(--purple); }
+  .card-orange::before { background: var(--orange); }
+  .card-pink::before { background: var(--pink); }
+  .card-teal::before { background: var(--teal); }
+
+  .skill-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 10px;
+  }
+
+  .skill-name-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .skill-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  .icon-blue { background: rgba(88,166,255,0.15); }
+  .icon-green { background: rgba(63,185,80,0.15); }
+  .icon-purple { background: rgba(188,140,255,0.15); }
+  .icon-orange { background: rgba(240,136,62,0.15); }
+  .icon-pink { background: rgba(255,123,114,0.15); }
+  .icon-teal { background: rgba(57,211,83,0.15); }
+
+  .skill-name {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .skill-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .tag-blue { color: var(--blue); background: rgba(88,166,255,0.12); }
+  .tag-green { color: var(--green); background: rgba(63,185,80,0.12); }
+  .tag-purple { color: var(--purple); background: rgba(188,140,255,0.12); }
+  .tag-orange { color: var(--orange); background: rgba(240,136,62,0.12); }
+  .tag-pink { color: var(--pink); background: rgba(255,123,114,0.12); }
+  .tag-teal { color: var(--teal); background: rgba(57,211,83,0.12); }
+
+  .skill-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+
+  .skill-desc {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.65;
+    margin-bottom: 16px;
+  }
+
+  .feature-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+
+  .feature-pill {
+    font-size: 12px;
+    color: var(--muted);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 3px 10px;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  .trigger-block {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin-top: 12px;
+  }
+
+  .trigger-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+  }
+
+  .trigger-text {
+    font-size: 12px;
+    color: var(--text);
+    line-height: 1.5;
+  }
+
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 40px 0;
+  }
+
+  .how-it-works {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 28px;
+    margin-bottom: 16px;
+  }
+
+  .step-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 16px;
+  }
+
+  .step {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+
+  .step-num {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: rgba(88,166,255,0.15);
+    border: 1px solid rgba(88,166,255,0.3);
+    color: var(--blue);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .step-content { flex: 1; }
+  .step-heading { font-weight: 500; font-size: 14px; color: var(--text); margin-bottom: 2px; }
+  .step-body { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+  .footer {
+    margin-top: 56px;
+    padding-top: 32px;
+    border-top: 1px solid var(--border);
+    text-align: center;
+  }
+
+  .footer-text {
+    font-size: 13px;
+    color: var(--muted);
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  .footer-text span { color: var(--blue); }
+
+  .stack-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 2px 6px;
+  }
+
+  .pipeline-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+    padding: 16px 20px;
+    background: var(--surface2);
+    border: 1px dashed var(--border);
+    border-radius: 8px;
+  }
+
+  .pipe-step {
+    font-size: 12px;
+    color: var(--text);
+    padding: 4px 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  .pipe-arrow {
+    color: var(--muted);
+    font-size: 14px;
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="badge-row">
+    <span class="badge badge-blue">Claude Skills</span>
+    <span class="badge badge-green">LinkedIn</span>
+    <span class="badge badge-purple">AI-Powered Outreach</span>
+    <span class="badge badge-orange">Flowbot Forge</span>
+  </div>
+  <div class="hero-title">LinkedIn Skills<br>for <span>Claude</span></div>
+  <div class="hero-sub">A full-stack system for LinkedIn growth, outreach, and content — built as installable Claude skills that encode expert strategy directly into your AI workflow.</div>
+  <div class="stat-row">
+    <div class="stat">
+      <span class="stat-num">6</span>
+      <span class="stat-label">Skills</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">14</span>
+      <span class="stat-label">Intent signals</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">5</span>
+      <span class="stat-label">Outreach stages</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">100%</span>
+      <span class="stat-label">Plug and play</span>
+    </div>
+  </div>
+</div>
+
+<div class="content">
+
+  <div class="section-label">Overview</div>
+
+  <div class="intro-block">
+    <p>Most LinkedIn advice is generic. Most LinkedIn tools are generic. These skills are not.</p>
+    <p>Each skill is a structured, opinionated system built to handle one specific layer of LinkedIn execution — from profile optimization to intent-based outreach. They encode <strong>real strategy</strong>: signal taxonomies, sequence frameworks, algorithm mechanics, voice rules, and quality checks that run before anything gets delivered.</p>
+    <p>Install any skill. The next time you ask Claude anything related to LinkedIn, the right system activates automatically.</p>
+  </div>
+
+  <div class="section-label">The Skills</div>
+
+  <div class="skill-grid">
+
+    <!-- Skill 1: Outreach Automator -->
+    <div class="skill-card card-blue">
+      <div class="skill-header">
+        <div class="skill-name-row">
+          <div class="skill-icon icon-blue">✉</div>
+          <span class="skill-name">linkedin-outreach-automator</span>
+          <span class="skill-tag tag-blue">Outreach</span>
+        </div>
+      </div>
+      <div class="skill-title">LinkedIn Outreach Automator</div>
+      <div class="skill-desc">A complete 5-message outreach sequence framework that turns LinkedIn DMs from vendor pitches into peer conversations. Covers connection request through final followup, with ICP-specific personas, character limits, timing guidance, and a strict voice filter baked in at the skill level.</div>
+      <div class="feature-list">
+        <span class="feature-pill">5-message arc</span>
+        <span class="feature-pill">300-char connection note</span>
+        <span class="feature-pill">4 ICP personas</span>
+        <span class="feature-pill">Acceptance followup</span>
+        <span class="feature-pill">Soft pitch framework</span>
+        <span class="feature-pill">No-pressure followup</span>
+      </div>
+      <div class="trigger-block">
+        <div class="trigger-label">Triggers on</div>
+        <div class="trigger-text">"write me outreach for a CTO" &bull; "build me a DM sequence" &bull; "draft a connection request" &bull; "help me reach out to this person"</div>
+      </div>
+    </div>
+
+    <!-- Skill 2: Intent Outreach -->
+    <div class="skill-card card-purple">
+      <div class="skill-header">
+        <div class="skill-name-row">
+          <div class="skill-icon icon-purple">⚡</div>
+          <span class="skill-name">linkedin-intent-outreach</span>
+          <span class="skill-tag tag-purple">Intent Signals</span>
+        </div>
+      </div>
+      <div class="skill-title">LinkedIn Intent-Based Outreach</div>
+      <div class="skill-desc">Turns real-time prospect behavior into high-conversion outreach. Three operating modes: identify signals you should act on, turn a spotted signal into a message immediately, or build a repeatable weekly monitoring workflow. Comes with a full signal taxonomy across 14 triggers, two deep reference files, and message templates for every signal type.</div>
+      <div class="feature-list">
+        <span class="feature-pill">14 intent signals</span>
+        <span class="feature-pill">3-tier urgency ranking</span>
+        <span class="feature-pill">Hiring signal decoder</span>
+        <span class="feature-pill">Content signal playbook</span>
+        <span class="feature-pill">Weekly monitoring workflow</span>
+        <span class="feature-pill">Signal CRM template</span>
+      </div>
+      <div class="trigger-block">
+        <div class="trigger-label">Triggers on</div>
+        <div class="trigger-text">"they just posted about..." &bull; "their company is hiring for..." &bull; "they liked my post" &bull; "they just got promoted" &bull; pasting a LinkedIn post or job listing</div>
+      </div>
+    </div>
+
+    <!-- Skill 3: Post Writer -->
+    <div class="skill-card card-green">
+      <div class="skill-header">
+        <div class="skill-name-row">
+          <div class="skill-icon icon-green">✍</div>
+          <span class="skill-name">linkedin-post-writer</span>
+          <span class="skill-tag tag-green">Content</span>
+        </div>
+      </div>
+      <div class="skill-title">LinkedIn Post Writer</div>
+      <div class="skill-desc">Every post goes through a strict 9-rule format checklist before delivery. First line under 10 words. 3 paragraphs max. 1,300 characters hard limit. No hashtags in body. No em dashes. No exclamation points. No filler openers. At least one specific data point per post. Plain language, active voice, 6th to 8th grade reading level.</div>
+      <div class="feature-list">
+        <span class="feature-pill">Hook-build-land structure</span>
+        <span class="feature-pill">1,300 char limit enforced</span>
+        <span class="feature-pill">Pre-delivery checklist</span>
+        <span class="feature-pill">ICP-targeted tone</span>
+        <span class="feature-pill">No filler phrases</span>
+      </div>
+      <div class="trigger-block">
+        <div class="trigger-label">Triggers on</div>
+        <div class="trigger-text">"write me a LinkedIn post" &bull; "help me post this" &bull; "turn this into a LinkedIn post" &bull; any story or insight shared publicly</div>
+      </div>
+    </div>
+
+    <!-- Skill 4: Comment Architect -->
+    <div class="skill-card card-orange">
+      <div class="skill-header">
+        <div class="skill-name-row">
+          <div class="skill-icon icon-orange">💬</div>
+          <span class="skill-name">high-intent-comment-architect</span>
+          <span class="skill-tag tag-orange">Engagement</span>
+        </div>
+      </div>
+      <div class="skill-title">High-Intent Comment Architect</div>
+      <div class="skill-desc">LinkedIn's algorithm treats meaningful comments as 15x stronger than a like. This skill generates comments that the algorithm rewards and that authors actually want to respond to — a contextual insight of 15+ words, a conversation-loop question, and a warm-up routine that primes distribution for your next post.</div>
+      <div class="feature-list">
+        <span class="feature-pill">15-word minimum insight</span>
+        <span class="feature-pill">Conversation-loop question</span>
+        <span class="feature-pill">Algorithm warm-up routine</span>
+        <span class="feature-pill">Shadowban protection</span>
+        <span class="feature-pill">40-80 word sweet spot</span>
+      </div>
+      <div class="trigger-block">
+        <div class="trigger-label">Triggers on</div>
+        <div class="trigger-text">"help me comment on this" &bull; "what should I say on this post" &bull; pasting a post and asking for a reply</div>
+      </div>
+    </div>
+
+    <!-- Skill 5: Profile Optimizer -->
+    <div class="skill-card card-teal">
+      <div class="skill-header">
+        <div class="skill-name-row">
+          <div class="skill-icon icon-teal">👤</div>
+          <span class="skill-name">linkedin-profile-optimizer</span>
+          <span class="skill-tag tag-teal">Profile</span>
+        </div>
+      </div>
+      <div class="skill-title">LinkedIn Profile Optimizer</div>
+      <div class="skill-desc">Built around LinkedIn's 360Brew foundation model — the 150-billion-parameter system that reads profiles as coherent documents to determine topic authority and audience routing. Runs a 5-step evaluation covering semantic alignment, headline engineering, About section rewriting, experience optimization, and skills section coherence.</div>
+      <div class="feature-list">
+        <span class="feature-pill">360Brew SEO check</span>
+        <span class="feature-pill">5-step evaluation</span>
+        <span class="feature-pill">Headline rewrite</span>
+        <span class="feature-pill">About section overhaul</span>
+        <span class="feature-pill">Keyword coherence audit</span>
+      </div>
+      <div class="trigger-block">
+        <div class="trigger-label">Triggers on</div>
+        <div class="trigger-text">"review my LinkedIn" &bull; "fix my headline" &bull; "make my profile attract clients" &bull; pasting any LinkedIn profile section</div>
+      </div>
+    </div>
+
+    <!-- Skill 6: Consultant Content Engine -->
+    <div class="skill-card card-pink">
+      <div class="skill-header">
+        <div class="skill-name-row">
+          <div class="skill-icon icon-pink">📡</div>
+          <span class="skill-name">consultant-content-engine</span>
+          <span class="skill-tag tag-pink">Strategy</span>
+        </div>
+      </div>
+      <div class="skill-title">Consultant Content Engine</div>
+      <div class="skill-desc">A 5-module system for consultants and service providers to convert LinkedIn presence into booked calls. Turns sales call transcripts into content that prospects say "this is exactly my situation" to. Covers lead magnets, content funnels, 90-day editorial planning, niche strategy, and long-form thought leadership.</div>
+      <div class="feature-list">
+        <span class="feature-pill">Sales call mind-reader</span>
+        <span class="feature-pill">Lead magnet builder</span>
+        <span class="feature-pill">90-day content plan</span>
+        <span class="feature-pill">Niche positioning</span>
+        <span class="feature-pill">Long-form writing</span>
+        <span class="feature-pill">CTA engineering</span>
+      </div>
+      <div class="trigger-block">
+        <div class="trigger-label">Triggers on</div>
+        <div class="trigger-text">"help me get clients from LinkedIn" &bull; "turn my sales calls into content" &bull; "build my content funnel" &bull; "what should I post to attract leads"</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="section-label">How It Works</div>
+
+  <div class="how-it-works">
+    <p style="font-size: 14px; color: var(--muted); margin-bottom: 4px;">Skills are installed once. After that, Claude reads your request, identifies which skill applies, loads the relevant framework, and executes it — no re-explaining needed.</p>
+
+    <div class="pipeline-row">
+      <span class="pipe-step">Install .skill file</span>
+      <span class="pipe-arrow">→</span>
+      <span class="pipe-step">Claude reads request</span>
+      <span class="pipe-arrow">→</span>
+      <span class="pipe-step">Skill auto-triggers</span>
+      <span class="pipe-arrow">→</span>
+      <span class="pipe-step">Framework runs</span>
+      <span class="pipe-arrow">→</span>
+      <span class="pipe-step">Output delivered</span>
+    </div>
+
+    <div class="step-list">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <div class="step-heading">Download the .skill file</div>
+          <div class="step-body">Each skill packages as a single .skill file. Download any or all of them from this repo.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <div class="step-heading">Install in Claude</div>
+          <div class="step-body">Drop the file into your Claude skills folder. The skill becomes part of your Claude environment immediately.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <div class="step-heading">Use naturally</div>
+          <div class="step-body">Ask Claude anything LinkedIn-related. The right skill triggers automatically. No slash commands, no prompts, no setup. Just describe what you need.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label">The Full Stack</div>
+
+  <div class="intro-block">
+    <p>These six skills cover the complete LinkedIn execution layer for a founder, consultant, or service business:</p>
+    <p><strong>Profile</strong> → <strong>Content</strong> → <strong>Engagement</strong> → <strong>Outreach</strong> → <strong>Intent</strong> → <strong>Conversion</strong></p>
+    <p>The outreach automator and intent outreach skills are designed to work together. The intent skill identifies the signal and writes the opening message. The outreach automator runs the full follow-up sequence from there. The post writer and comment architect feed the top of the funnel, warming up prospects before direct outreach begins.</p>
+  </div>
+
+  <div class="footer">
+    <div class="footer-text">Built by <span>Flowbot Forge</span> &bull; Washington DC &bull; flowbotforge.com</div>
+  </div>
+
+</div>
+
+</body>
+</html>
